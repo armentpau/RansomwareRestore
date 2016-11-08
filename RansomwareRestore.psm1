@@ -462,7 +462,7 @@ ff57 5043 'ÿ W P C'
 					Write-Error "Unable to create the folder $($env:SystemDrive)\adminTemp_$($env:USERNAME) - please ensure you have the proper permissions to perform this restore."
 					break
 				}
-				$listOfFiles = foreach ($file in (Get-ChildItem2 -Path "$searchPath" -Recurse -Force -File | where-object { ($_.name -like "*.xls") -or ($_.name -like "*.xlsx") -or ($_.name -like "*.doc") -or ($_.name -like "*.docx") -or ($_.name -like "*.xlsm") -or ($_.name -like "*.pdf") -or ($_.name -like "*.ppt") -or ($_.name -like "*.pptx") -or ($_.name -like "*.xlsm") -or ($_.name -like "*.docm") -or ($_.name -like "*.xlsb") -or ($_.name -like "*.pptm") -or ($_.name -like "*.pdf") }))
+				$listOfFiles = foreach ($file in (Get-ChildItem2 -Path "$searchPath" -Recurse -Force -File| where-object { ($_.name -like "*.xls") -or ($_.name -like "*.xlsx") -or ($_.name -like "*.doc") -or ($_.name -like "*.docx") -or ($_.name -like "*.xlsm") -or ($_.name -like "*.pdf") -or ($_.name -like "*.ppt") -or ($_.name -like "*.pptx") -or ($_.name -like "*.xlsm") -or ($_.name -like "*.docm") -or ($_.name -like "*.xlsb") -or ($_.name -like "*.pptm") -or ($_.name -like "*.pdf") }))
 				{
 					$shortFlag = 0
 					if ($file.fullname.length -ge 240)
@@ -643,8 +643,9 @@ function Restore-EncryptedFiles
 			$directories = $rawDirectories | Sort-Object -Unique
 			foreach ($directory in $directories)
 			{
-				Write-Verbose $fileSystemBase
-				Write-Verbose $restoreFromPath
+				Write-Verbose "File system base: $fileSystemBase"
+				Write-Verbose "Restore from path: $restoreFromPath"
+				Start-Sleep 5
 				$restoreFromPath_modified = $directory.tostring().replace($filesystembase, $restoreFromPath)
 				Write-Verbose $restoreFromPath_modified
 				Get-ChildItem2 -Path $restoreFromPath_modified -File | ForEach-Object{
@@ -659,7 +660,7 @@ function Restore-EncryptedFiles
 						"ErrorID" = ""
 					}
 					Write-Verbose "Restore to: $fileRestoreToPath"
-					Write-Verbose "Restore From: $file"
+					Write-Verbose "Restore From: $restoreFromPath_modified"
 					$fileFound = 1
 					try
 					{
